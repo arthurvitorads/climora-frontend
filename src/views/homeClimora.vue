@@ -78,12 +78,10 @@
           </v-list-item>
         </v-list>
       </v-card>
-
-
     </v-container>
+
     <v-overlay :model-value="searchActive" @update:model-value="val => searchActive = val" absolute opacity="0.95">
       <v-card class="pa-4" elevation="4" style="width: 100vw; height: 100vh; border-radius: 0;">
-
         <v-text-field v-model="searchQuery" placeholder="Pesquisar..." append-inner-icon="mdi-magnify" outlined dense
           hide-details :disabled="loadingCities" />
 
@@ -103,21 +101,18 @@
         <v-btn block color="grey lighten-1" class="mt-4" @click="searchActive = false">
           <v-icon left>mdi-arrow-left</v-icon> Voltar
         </v-btn>
-
       </v-card>
     </v-overlay>
-
-
   </v-app>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, onMounted } from 'vue'
 
 const drawer = ref(false)
 const searchActive = ref(false)
 const searchQuery = ref("")
-const loadingCities = ref(true) 
+const loadingCities = ref(true)
 
 const menuItems = [
   { title: "Início", icon: "mdi-home", route: "/" },
@@ -125,15 +120,15 @@ const menuItems = [
   { title: "Comunidade", icon: "mdi-cog", route: "/configuracoes" },
 ]
 
-const cities = ref<string[]>([])
-const coords = ref<Record<string, { lat: number, lon: number }>>({})
+const cities = ref([])
+const coords = ref({})
 
 const filteredCities = computed(() =>
   cities.value.filter(c => c.toLowerCase().includes(searchQuery.value.toLowerCase()))
 )
 
-const selectedCity = ref<string | null>(null)
-const weatherDetails = ref<any[]>([])
+const selectedCity = ref(null)
+const weatherDetails = ref([])
 const loadingWeather = ref(false)
 
 const fetchCities = async () => {
@@ -141,7 +136,7 @@ const fetchCities = async () => {
   try {
     const res = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados/41/municipios')
     const data = await res.json()
-    data.forEach((municipio: any) => {
+    data.forEach(municipio => {
       const nome = municipio.nome
       cities.value.push(nome)
       coords.value[nome] = { lat: 0, lon: 0 }
@@ -153,21 +148,18 @@ const fetchCities = async () => {
   }
 }
 
-const formatDate = (date?: Date | string | null): string => {
+const formatDate = date => {
   if (!date) return ""
-
   const validDate = date instanceof Date ? date : new Date(date)
   if (isNaN(validDate.getTime())) return ""
-
-  return validDate!.toISOString().split("T")[0].replace(/-/g, "")
+  return validDate.toISOString().split("T")[0].replace(/-/g, "")
 }
 
-
-const fetchWeather = async (city: string) => {
+const fetchWeather = async city => {
   loadingWeather.value = true
   weatherDetails.value = []
 
-  const coord = coords.value[city] ?? { lat: -25.4284, lon: -49.2733 } 
+  const coord = coords.value[city] || { lat: -25.4284, lon: -49.2733 }
   const lat = coord.lat
   const lon = coord.lon
 
@@ -190,12 +182,11 @@ const fetchWeather = async (city: string) => {
     const tempUnit = data.parameters.T2M.units
     const precipUnit = data.parameters.PRECTOTCORR.units
 
-    const days = Object.keys(t2m).map(date => ({
+    weatherDetails.value = Object.keys(t2m).map(date => ({
       date,
       temp: t2m[date] === -999.0 ? "Sem dados" : `${t2m[date].toFixed(1)} ${tempUnit}`,
       precip: prectot[date] === -999.0 ? "Sem dados" : `${prectot[date].toFixed(2)} ${precipUnit}`,
     }))
-    weatherDetails.value = days
   } catch (e) {
     weatherDetails.value = []
     console.error(e)
@@ -204,7 +195,7 @@ const fetchWeather = async (city: string) => {
   }
 }
 
-const selectCity = (city: string) => {
+const selectCity = city => {
   selectedCity.value = city
   fetchWeather(city)
   searchActive.value = false
@@ -218,9 +209,6 @@ onMounted(() => {
   fetchCities()
 })
 </script>
-
-
-
 
 <style scoped>
 .weather-card {
@@ -258,6 +246,5 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 </style>
