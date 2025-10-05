@@ -1,7 +1,6 @@
 <template>
   <v-app class="bg-gradient">
     <v-container class="fill-height d-flex flex-column justify-space-evenly  py-6" fluid>
-    <!-- Drawer lateral -->
       <v-navigation-drawer v-model="drawer" app temporary color="white">
         <v-list nav>
           <v-list-item>
