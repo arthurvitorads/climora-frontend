@@ -8,6 +8,4 @@
 
 <script setup lang="ts">
 import HomeClimora from './components/homeClimora.vue';
-
-  //
 </script>
