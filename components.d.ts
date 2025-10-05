@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    HomeClimora: typeof import('./src/components/homeClimora.vue')['default']
+    SearchCity: typeof import('./src/components/searchCity.vue')['default']
+    Teste: typeof import('./src/components/teste.vue')['default']
   }
 }

@@ -7,5 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import HomeClimora from './components/homeClimora.vue';
+import HomeClimora from './views/homeClimora.vue';
+
 </script>
