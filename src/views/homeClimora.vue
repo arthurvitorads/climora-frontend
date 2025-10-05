@@ -155,15 +155,13 @@ const fetchCities = async () => {
 
 const formatDate = (date?: Date | string | null): string => {
   if (!date) return ""
-  let validDate: Date
-  if (date instanceof Date) validDate = date
-  else if (typeof date === "string") {
-    const parsed = new Date(date)
-    if (!(parsed instanceof Date) || isNaN(parsed.getTime())) return ""
-    validDate = parsed
-  } else return ""
-  return validDate.toISOString().split("T")[0].replace(/-/g, "")
+
+  const validDate = date instanceof Date ? date : new Date(date)
+  if (isNaN(validDate.getTime())) return ""
+
+  return validDate!.toISOString().split("T")[0].replace(/-/g, "")
 }
+
 
 const fetchWeather = async (city: string) => {
   loadingWeather.value = true

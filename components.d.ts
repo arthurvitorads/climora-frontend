@@ -9,6 +9,5 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     SearchCity: typeof import('./src/components/searchCity.vue')['default']
-    Teste: typeof import('./src/components/teste.vue')['default']
   }
 }
